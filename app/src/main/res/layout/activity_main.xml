@@ -20,7 +20,7 @@
         android:layout_width="wrap_content"
         android:layout_height="60dp"
         android:hint="Enter the date of a slip."
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/rvSlipDateList"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -29,6 +29,7 @@
         android:id="@+id/btnAddSlipDate"
         android:layout_width="wrap_content"
         android:layout_height="60dp"
+        android:layout_marginTop="150dp"
         android:text="Enter slip date"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -47,15 +48,16 @@
         android:id="@+id/tvTimeSinceLastSlip"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="240dp"
         android:text="X Years, Y Months &amp; Z Days"
-        app:layout_constraintBottom_toTopOf="@+id/etSlipDateEntry"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/tvLabelTimeSinceLastSlip"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="126dp"
+        android:layout_height="16dp"
         android:text="Time since last slip:"
         app:layout_constraintBottom_toTopOf="@+id/tvTimeSinceLastSlip"
         app:layout_constraintEnd_toEndOf="parent"

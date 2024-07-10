@@ -13,11 +13,19 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.anonymoustokens.ui.theme.AnonymousTokensTheme
+import kotlinx.android.synthetic.main.activity_main.btnAddSlipDate
+import kotlinx.android.synthetic.main.activity_main.btnDeleteSelectedSlipDates
+import kotlinx.android.synthetic.main.activity_main.etSlipDateEntry
+import kotlinx.android.synthetic.main.activity_main.rvSlipDateList
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
 class MainActivity : ComponentActivity() {
+
+    private lateinit var slipDateAdapter: SlipDateAdapter
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -31,6 +39,25 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
+
+        slipDateAdapter = SlipDateAdapter(mutableListOf())
+
+        rvSlipDateList.adapter = slipDateAdapter
+        rvSlipDateList.layoutManager = LinearLayoutManager(this)
+
+        btnAddSlipDate.setOnClickListener {
+            val slipDateEntry = etSlipDateEntry.text.toString()
+            if(slipDateEntry.isNotEmpty()) {
+                val slipDate = SlipDate(slipDateEntry)
+                slipDateAdapter.addSlipDate(slipDate)
+                etSlipDateEntry.text.clear()
+            }
+        }
+
+        btnDeleteSelectedSlipDates.setOnClickListener {
+            slipDateAdapter.deleteSelectedSlipDates()
+        }
+
     }
 }
 
