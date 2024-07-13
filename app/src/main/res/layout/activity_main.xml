@@ -29,7 +29,6 @@
         android:id="@+id/btnAddSlipDate"
         android:layout_width="wrap_content"
         android:layout_height="60dp"
-        android:layout_marginTop="150dp"
         android:text="Enter slip date"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

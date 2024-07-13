@@ -2,27 +2,21 @@ package com.example.anonymoustokens
 
 import android.graphics.Paint.STRIKE_THRU_TEXT_FLAG
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.android.synthetic.main.item_slipdate.view.cbDelete
-import kotlinx.android.synthetic.main.item_slipdate.view.tvSlipDate
+import com.example.anonymoustokens.databinding.ItemSlipdateBinding
 
 class SlipDateAdapter (
     private val slipDates: MutableList<SlipDate>
 ) :RecyclerView.Adapter<SlipDateAdapter.SlipDateViewHolder>() {
 
-    class SlipDateViewHolder (itemView: View) : RecyclerView.ViewHolder(itemView)
+    inner class SlipDateViewHolder (val binding: ItemSlipdateBinding) : RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SlipDateViewHolder {
-        return SlipDateViewHolder(
-            LayoutInflater.from(parent.context).inflate(
-                R.layout.item_slipdate,
-                parent,
-                false
-            )
-        )
+        val binding = ItemSlipdateBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+
+        return SlipDateViewHolder(binding)
     }
 
     fun addSlipDate(slipDate: SlipDate) {
@@ -47,13 +41,15 @@ class SlipDateAdapter (
 
     override fun onBindViewHolder(holder: SlipDateViewHolder, position: Int) {
         var curSlipDate = slipDates[position]
-        holder.itemView.apply {
-            tvSlipDate.text = curSlipDate.date.toString()
-            cbDelete.isChecked = curSlipDate.isChecked
-            toggleStrikeThrough(tvSlipDate, curSlipDate.isChecked)
-            cbDelete.setOnCheckedChangeListener { _, isChecked ->
-                toggleStrikeThrough(tvSlipDate, isChecked)
-                curSlipDate.isChecked = !curSlipDate.isChecked
+        with(holder) {
+            holder.itemView.apply {
+                binding.tvSlipDate.text = curSlipDate.date.toString()
+                binding.cbDelete.isChecked = curSlipDate.isChecked
+                toggleStrikeThrough(binding.tvSlipDate, curSlipDate.isChecked)
+                binding.cbDelete.setOnCheckedChangeListener { _, isChecked ->
+                    toggleStrikeThrough(binding.tvSlipDate, isChecked)
+                    curSlipDate.isChecked = !curSlipDate.isChecked
+                }
             }
         }
     }

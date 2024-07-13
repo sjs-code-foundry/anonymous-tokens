@@ -3,58 +3,45 @@ package com.example.anonymoustokens
 import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.annotation.RequiresApi
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.anonymoustokens.databinding.ActivityMainBinding
 import com.example.anonymoustokens.ui.theme.AnonymousTokensTheme
-import kotlinx.android.synthetic.main.activity_main.btnAddSlipDate
-import kotlinx.android.synthetic.main.activity_main.btnDeleteSelectedSlipDates
-import kotlinx.android.synthetic.main.activity_main.etSlipDateEntry
-import kotlinx.android.synthetic.main.activity_main.rvSlipDateList
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
 class MainActivity : ComponentActivity() {
 
     private lateinit var slipDateAdapter: SlipDateAdapter
+    private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
         enableEdgeToEdge()
-        setContent {
-            AnonymousTokensTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        date = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
-            }
-        }
 
         slipDateAdapter = SlipDateAdapter(mutableListOf())
 
-        rvSlipDateList.adapter = slipDateAdapter
-        rvSlipDateList.layoutManager = LinearLayoutManager(this)
+        binding.rvSlipDateList.adapter = slipDateAdapter
+        binding.rvSlipDateList.layoutManager = LinearLayoutManager(this)
 
-        btnAddSlipDate.setOnClickListener {
-            val slipDateEntry = etSlipDateEntry.text.toString()
+        binding.btnAddSlipDate.setOnClickListener {
+            val slipDateEntry = binding.etSlipDateEntry.text.toString()
             if(slipDateEntry.isNotEmpty()) {
                 val slipDate = SlipDate(slipDateEntry)
                 slipDateAdapter.addSlipDate(slipDate)
-                etSlipDateEntry.text.clear()
+                binding.etSlipDateEntry.text.clear()
             }
         }
 
-        btnDeleteSelectedSlipDates.setOnClickListener {
+        binding.btnDeleteSelectedSlipDates.setOnClickListener {
             slipDateAdapter.deleteSelectedSlipDates()
         }
 
