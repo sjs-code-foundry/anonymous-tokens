@@ -38,21 +38,13 @@ class MainActivity : ComponentActivity() {
         binding.rvSlipDateList.adapter = slipDateAdapter
         binding.rvSlipDateList.layoutManager = LinearLayoutManager(this)
 
-//        binding.btnAddSlipDate.setOnClickListener {
-//            val slipDateEntry = binding.etSlipDateEntry.text.toString()
-//            if(slipDateEntry.isNotEmpty()) {
-//                val slipDate = SlipDate(slipDateEntry)
-//                slipDateAdapter.addSlipDate(slipDate)
-//                binding.etSlipDateEntry.text.clear()
-//            }
-//        }
-
         binding.btnAddSlipDate.setOnClickListener {
             showDatePicker()
         }
 
         binding.btnDeleteSelectedSlipDates.setOnClickListener {
             slipDateAdapter.deleteSelectedSlipDates()
+            updateCleanTime()
         }
     }
 
@@ -66,6 +58,7 @@ class MainActivity : ComponentActivity() {
                 val selectedSlipDate = SlipDate("$formattedDate")
                 binding.tvSlipDateEntry.text = selectedSlipDate.date
                 slipDateAdapter.addSlipDate(selectedSlipDate)
+                updateCleanTime()
             },
             calendar.get(Calendar.YEAR),
             calendar.get(Calendar.MONTH),
@@ -73,14 +66,23 @@ class MainActivity : ComponentActivity() {
         )
         datePickerDialog.show()
     }
-}
 
-@RequiresApi(Build.VERSION_CODES.O)
-@Composable
-fun FormatDate(date: String): LocalDate? {
-    val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
-    val formattedDate = LocalDate.parse(date, formatter)
+    private fun updateCleanTime() {
+        val latestDate = getLatestDate()
 
-    println(formattedDate)
-    return formattedDate
+        if(latestDate>0) {
+            binding.tvTimeSinceLastSlip.text = "There are $latestDate dates."
+        } else {
+            binding.tvTimeSinceLastSlip.text = "There are no dates."
+        }
+    }
+
+    private fun getLatestDate(): Int {
+        val dateListLength = slipDateAdapter.itemCount
+        if(dateListLength>0) {
+            return dateListLength
+        } else {
+            return 0
+        }
+    }
 }
