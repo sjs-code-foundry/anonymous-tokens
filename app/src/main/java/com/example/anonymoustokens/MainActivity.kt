@@ -70,19 +70,35 @@ class MainActivity : ComponentActivity() {
     private fun updateCleanTime() {
         val latestDate = getLatestDate()
 
-        if(latestDate>0) {
-            binding.tvTimeSinceLastSlip.text = "There are $latestDate dates."
+        if(latestDate != null) {
+            binding.tvTimeSinceLastSlip.text = "$latestDate"
         } else {
             binding.tvTimeSinceLastSlip.text = "There are no dates."
         }
     }
 
-    private fun getLatestDate(): Int {
+    private fun getLatestDate(): String? {
+        val slipDateList = slipDateAdapter.getSlipDates()
         val dateListLength = slipDateAdapter.itemCount
-        if(dateListLength>0) {
-            return dateListLength
+        if(dateListLength > 0) {
+            var latestDate = slipDateList[0].date
+
+            for (i in slipDateList.indices) {
+                if (i === dateListLength-1) {
+                    break
+                }
+
+                var currentDate = slipDateList[i].date
+                var nextDate = slipDateList[i+1].date
+
+                if (currentDate < nextDate) {
+                    latestDate = nextDate
+                }
+            }
+
+            return latestDate
         } else {
-            return 0
+            return null
         }
     }
 }

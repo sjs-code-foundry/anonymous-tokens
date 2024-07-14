@@ -19,6 +19,10 @@ class SlipDateAdapter (
         return SlipDateViewHolder(binding)
     }
 
+    fun getSlipDates(): MutableList<SlipDate> {
+        return slipDates
+    }
+
     fun addSlipDate(slipDate: SlipDate) {
         slipDates.add(slipDate)
         notifyItemInserted(slipDates.size - 1)
