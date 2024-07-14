@@ -16,11 +16,11 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <EditText
-        android:id="@+id/etSlipDateEntry"
+    <TextView
+        android:id="@+id/tvSlipDateEntry"
         android:layout_width="wrap_content"
         android:layout_height="60dp"
-        android:hint="Enter the date of a slip."
+        android:hint="DD/MM/YYYY"
         app:layout_constraintBottom_toBottomOf="@+id/rvSlipDateList"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -30,10 +30,10 @@
         android:id="@+id/btnAddSlipDate"
         android:layout_width="wrap_content"
         android:layout_height="60dp"
-        android:text="Enter slip date"
+        android:text="Add Slip Date"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etSlipDateEntry" />
+        app:layout_constraintTop_toBottomOf="@+id/tvSlipDateEntry" />
 
     <Button
         android:id="@+id/btnDeleteSelectedSlipDates"

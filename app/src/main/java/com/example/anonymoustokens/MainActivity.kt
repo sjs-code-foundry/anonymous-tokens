@@ -1,7 +1,9 @@
 package com.example.anonymoustokens
 
+import android.app.DatePickerDialog
 import android.os.Build
 import android.os.Bundle
+import android.widget.DatePicker
 import androidx.activity.ComponentActivity
 import androidx.activity.enableEdgeToEdge
 import androidx.annotation.RequiresApi
@@ -12,13 +14,17 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.anonymoustokens.databinding.ActivityMainBinding
 import com.example.anonymoustokens.ui.theme.AnonymousTokensTheme
+import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
+import java.util.Calendar
+import java.util.Locale
 
 class MainActivity : ComponentActivity() {
 
     private lateinit var slipDateAdapter: SlipDateAdapter
     private lateinit var binding: ActivityMainBinding
+    private val calendar = Calendar.getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,37 +38,40 @@ class MainActivity : ComponentActivity() {
         binding.rvSlipDateList.adapter = slipDateAdapter
         binding.rvSlipDateList.layoutManager = LinearLayoutManager(this)
 
+//        binding.btnAddSlipDate.setOnClickListener {
+//            val slipDateEntry = binding.etSlipDateEntry.text.toString()
+//            if(slipDateEntry.isNotEmpty()) {
+//                val slipDate = SlipDate(slipDateEntry)
+//                slipDateAdapter.addSlipDate(slipDate)
+//                binding.etSlipDateEntry.text.clear()
+//            }
+//        }
+
         binding.btnAddSlipDate.setOnClickListener {
-            val slipDateEntry = binding.etSlipDateEntry.text.toString()
-            if(slipDateEntry.isNotEmpty()) {
-                val slipDate = SlipDate(slipDateEntry)
-                slipDateAdapter.addSlipDate(slipDate)
-                binding.etSlipDateEntry.text.clear()
-            }
+            showDatePicker()
         }
 
         binding.btnDeleteSelectedSlipDates.setOnClickListener {
             slipDateAdapter.deleteSelectedSlipDates()
         }
-
     }
-}
 
-@Composable
-fun Greeting(date: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "You have been clean for: $date!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    AnonymousTokensTheme {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            Greeting(FormatDate("2024-06-01").toString())
-        }
+    private fun showDatePicker() {
+        val datePickerDialog = DatePickerDialog(
+            this, { DatePicker, year: Int, monthOfYear: Int, dayOfMonth: Int ->
+                val selectedDate = Calendar.getInstance()
+                selectedDate.set(year, monthOfYear, dayOfMonth)
+                val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+                val formattedDate = dateFormat.format(selectedDate.time)
+                val selectedSlipDate = SlipDate("$formattedDate")
+                binding.tvSlipDateEntry.text = selectedSlipDate.date
+                slipDateAdapter.addSlipDate(selectedSlipDate)
+            },
+            calendar.get(Calendar.YEAR),
+            calendar.get(Calendar.MONTH),
+            calendar.get(Calendar.DAY_OF_MONTH)
+        )
+        datePickerDialog.show()
     }
 }
 
