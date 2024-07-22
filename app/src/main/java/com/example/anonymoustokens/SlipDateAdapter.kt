@@ -47,7 +47,7 @@ class SlipDateAdapter (
         var curSlipDate = slipDates[position]
         with(holder) {
             holder.itemView.apply {
-                binding.tvSlipDate.text = curSlipDate.date.toString()
+                binding.tvSlipDate.text = curSlipDate.date
                 binding.cbDelete.isChecked = curSlipDate.isChecked
                 toggleStrikeThrough(binding.tvSlipDate, curSlipDate.isChecked)
                 binding.cbDelete.setOnCheckedChangeListener { _, isChecked ->

@@ -16,6 +16,8 @@ import com.example.anonymoustokens.databinding.ActivityMainBinding
 import com.example.anonymoustokens.ui.theme.AnonymousTokensTheme
 import java.text.SimpleDateFormat
 import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.Period
 import java.time.format.DateTimeFormatter
 import java.util.Calendar
 import java.util.Locale
@@ -26,6 +28,7 @@ class MainActivity : ComponentActivity() {
     private lateinit var binding: ActivityMainBinding
     private val calendar = Calendar.getInstance()
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -48,6 +51,7 @@ class MainActivity : ComponentActivity() {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun showDatePicker() {
         val datePickerDialog = DatePickerDialog(
             this, { DatePicker, year: Int, monthOfYear: Int, dayOfMonth: Int ->
@@ -56,7 +60,6 @@ class MainActivity : ComponentActivity() {
                 val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
                 val formattedDate = dateFormat.format(selectedDate.time)
                 val selectedSlipDate = SlipDate("$formattedDate")
-                binding.tvSlipDateEntry.text = selectedSlipDate.date
                 slipDateAdapter.addSlipDate(selectedSlipDate)
                 updateCleanTime()
             },
@@ -67,36 +70,46 @@ class MainActivity : ComponentActivity() {
         datePickerDialog.show()
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun updateCleanTime() {
         val latestDate = getLatestDate()
 
+        binding.tvSlipDateEntry.text = latestDate
+
         if(latestDate != null) {
-            binding.tvTimeSinceLastSlip.text = "$latestDate"
+            val dateFormat = DateTimeFormatter.ofPattern("dd/MM/yyyy")
+
+            val from = LocalDate.parse(latestDate, dateFormat)
+            val to = LocalDate.now()
+
+            val period = Period.between(from, to)
+            val years = period.years
+            val months = period.months
+            val days = period.days
+
+            if (years < 0 || months < 0 || days < 0) {
+                binding.tvTimeSinceLastSlip.text = "One date is in the future, please delete."
+            } else if (years == 0 && months == 0 ) {
+                binding.tvTimeSinceLastSlip.text = "Clean for $days days."
+            } else if (years == 0) {
+                binding.tvTimeSinceLastSlip.text = "Clean for $months months and $days days."
+            } else {
+                binding.tvTimeSinceLastSlip.text = "Clean for $years years, $months months and $days days."
+            }
         } else {
             binding.tvTimeSinceLastSlip.text = "There are no dates."
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun getLatestDate(): String? {
-        val slipDateList = slipDateAdapter.getSlipDates()
+        var slipDateList = slipDateAdapter.getSlipDates()
         val dateListLength = slipDateAdapter.itemCount
+
         if(dateListLength > 0) {
-            var latestDate = slipDateList[0].date
+            slipDateList.sortByDescending { it.date }
 
-            for (i in slipDateList.indices) {
-                if (i === dateListLength-1) {
-                    break
-                }
-
-                var currentDate = slipDateList[i].date
-                var nextDate = slipDateList[i+1].date
-
-                if (currentDate < nextDate) {
-                    latestDate = nextDate
-                }
-            }
-
-            return latestDate
+            return slipDateList[0].date
         } else {
             return null
         }
