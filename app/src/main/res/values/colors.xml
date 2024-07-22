@@ -7,4 +7,11 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="token_dayOne">#FFFFFF</color>
+    <color name="token_1Month">#FF0000</color>
+    <color name="token_2Months">#FFFF00</color>
+    <color name="token_3Months">#00FF00</color>
+    <color name="token_6Months">#0000FF</color>
+    <color name="token_9Months">#CC00CC</color>
+    <color name="token_1YearPlus">#996600</color>
 </resources>

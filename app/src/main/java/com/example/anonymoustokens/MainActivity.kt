@@ -1,24 +1,17 @@
 package com.example.anonymoustokens
 
 import android.app.DatePickerDialog
+import android.graphics.PorterDuff
 import android.os.Build
 import android.os.Bundle
-import android.widget.DatePicker
 import androidx.activity.ComponentActivity
 import androidx.activity.enableEdgeToEdge
 import androidx.annotation.RequiresApi
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.anonymoustokens.databinding.ActivityMainBinding
-import com.example.anonymoustokens.ui.theme.AnonymousTokensTheme
 import java.text.SimpleDateFormat
 import java.time.LocalDate
-import java.time.LocalDateTime
 import java.time.Period
 import java.time.format.DateTimeFormatter
 import java.util.Calendar
@@ -91,16 +84,20 @@ class MainActivity : ComponentActivity() {
 
             if (years < 0 || months < 0 || days < 0) {
                 binding.tvTimeSinceLastSlip.text = "One date is in the future, please delete."
+                tokenColour(0, 0, 0)
             } else if (years == 0 && months == 0 ) {
                 binding.tvTimeSinceLastSlip.text = "Clean for $days days."
+                tokenColour(years, months, days)
             } else if (years == 0) {
                 binding.tvTimeSinceLastSlip.text = "Clean for $months months and $days days."
+                tokenColour(years, months, days)
             } else {
                 binding.tvTimeSinceLastSlip.text = "Clean for $years years, $months months and $days days."
+                tokenColour(years, months, days)
             }
         } else {
             binding.tvTimeSinceLastSlip.text = "There are no dates."
-            tokenColour("#000000")
+            tokenColour(0, 0, 0)
         }
     }
 
@@ -118,14 +115,23 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    private fun tokenColour(colour: String) {
+    private fun tokenColour(years: Int, months: Int, days: Int) {
         val token = binding.ivAnonymousToken
 
-        token.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.black))
-        // Changes background of token - find a way to colour to token in!
-
-//        token.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.black))
-//        ContextCompat.getColor(applicationContext, R.color.black)
-//        android.graphics.Color.parseColor(colourConv.toString())
+        if (months < 1 && years < 1) {
+            token.setColorFilter(ContextCompat.getColor(this, R.color.token_dayOne), PorterDuff.Mode.MULTIPLY )
+        } else if (months == 1 &&  years == 0) {
+            token.setColorFilter(ContextCompat.getColor(this, R.color.token_1Month), PorterDuff.Mode.MULTIPLY )
+        } else if (months == 2 &&  years == 0)  {
+            token.setColorFilter(ContextCompat.getColor(this, R.color.token_2Months), PorterDuff.Mode.MULTIPLY )
+        } else if (months in 3..5 && years == 0) {
+            token.setColorFilter(ContextCompat.getColor(this, R.color.token_3Months), PorterDuff.Mode.MULTIPLY )
+        } else if (months in 6..8 && years == 0) {
+            token.setColorFilter(ContextCompat.getColor(this, R.color.token_6Months), PorterDuff.Mode.MULTIPLY )
+        } else if (months in 9..11 && years == 0) {
+            token.setColorFilter(ContextCompat.getColor(this, R.color.token_9Months), PorterDuff.Mode.MULTIPLY )
+        } else {
+            token.setColorFilter(ContextCompat.getColor(this, R.color.token_1YearPlus), PorterDuff.Mode.MULTIPLY )
+        }
     }
 }

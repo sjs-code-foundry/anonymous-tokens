@@ -8,7 +8,7 @@ A counter app for Android that tracks a slip date and presents the appropriate t
 
 - [x] User can enter date of their last slip
 - [x] Date is converted to a human-readable report in days, months and years
-- [ ] A circular token is coloured appropriately according to the length of sobriety
+- [x] A circular token is coloured appropriately according to the length of sobriety
 - [ ] Push notifications denote upcoming achievements of new tokens
 
 ### User Assistance
