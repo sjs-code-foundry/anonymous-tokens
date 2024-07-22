@@ -10,7 +10,9 @@ import androidx.annotation.RequiresApi
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.anonymoustokens.databinding.ActivityMainBinding
 import com.example.anonymoustokens.ui.theme.AnonymousTokensTheme
@@ -98,6 +100,7 @@ class MainActivity : ComponentActivity() {
             }
         } else {
             binding.tvTimeSinceLastSlip.text = "There are no dates."
+            tokenColour("#000000")
         }
     }
 
@@ -113,5 +116,16 @@ class MainActivity : ComponentActivity() {
         } else {
             return null
         }
+    }
+
+    private fun tokenColour(colour: String) {
+        val token = binding.ivAnonymousToken
+
+        token.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.black))
+        // Changes background of token - find a way to colour to token in!
+
+//        token.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.black))
+//        ContextCompat.getColor(applicationContext, R.color.black)
+//        android.graphics.Color.parseColor(colourConv.toString())
     }
 }
