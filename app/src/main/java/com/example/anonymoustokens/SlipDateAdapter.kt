@@ -1,6 +1,7 @@
 package com.example.anonymoustokens
 
 import android.graphics.Paint.STRIKE_THRU_TEXT_FLAG
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.TextView
@@ -16,10 +17,14 @@ class SlipDateAdapter (
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SlipDateViewHolder {
         val binding = ItemSlipdateBinding.inflate(LayoutInflater.from(parent.context), parent, false)
 
+        Log.i("ViewHolderCreated", "True")
+
         return SlipDateViewHolder(binding)
     }
 
     fun getSlipDates(): MutableList<SlipDate> {
+        Log.i("SlipDateList", slipDates.toString().toString())
+        // ^^^ These are correct, problem is with RecyclerView
         return slipDates
     }
 
@@ -45,6 +50,8 @@ class SlipDateAdapter (
 
     override fun onBindViewHolder(holder: SlipDateViewHolder, position: Int) {
         var curSlipDate = slipDates[position]
+        Log.i("curSlipDate", curSlipDate.toString())
+        // ^^^ curSlipDate should call for every item in list but sometimes only calls for most recent date
         with(holder) {
             holder.itemView.apply {
                 binding.tvSlipDate.text = curSlipDate.date
@@ -56,6 +63,7 @@ class SlipDateAdapter (
                 }
             }
         }
+        Log.i("ViewHolderBound", "True")
     }
 
     override fun getItemCount(): Int {
