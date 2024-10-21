@@ -44,11 +44,15 @@ class SlipDateAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
         fun bind(slipDate: SlipDate) {
 
-            slipdateField.setText(slipDate.date)
+            slipdateField.setText(slipDate.date.toString())
             checkField.isChecked = slipDate.isChecked
 
         }
 
+    }
+
+    fun getSlipDates(): List<SlipDate> {
+        return slipdates
     }
 
 }

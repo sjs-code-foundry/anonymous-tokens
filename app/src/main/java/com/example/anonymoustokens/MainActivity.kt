@@ -4,6 +4,7 @@ import android.app.DatePickerDialog
 import android.graphics.PorterDuff
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.enableEdgeToEdge
 import androidx.annotation.RequiresApi
@@ -16,6 +17,7 @@ import java.time.LocalDate
 import java.time.Period
 import java.time.format.DateTimeFormatter
 import java.util.Calendar
+import java.util.Date
 import java.util.Locale
 
 class MainActivity : ComponentActivity() {
@@ -34,6 +36,11 @@ class MainActivity : ComponentActivity() {
 
         initRecyclerView()
         addTestData()
+
+        binding.btnAddSlipDate.setOnClickListener {
+//            showDatePicker()
+            Log.i("Latest Date", getLatestDate().toString())
+        }
     }
 
     private fun addTestData() {
@@ -46,6 +53,22 @@ class MainActivity : ComponentActivity() {
             layoutManager = LinearLayoutManager (this@MainActivity)
             slipDateAdapter = SlipDateAdapter()
             adapter = slipDateAdapter
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun getLatestDate(): LocalDate? {
+        val slipDateList = slipDateAdapter.getSlipDates()
+        val dateListLength = slipDateAdapter.itemCount
+
+        if(dateListLength > 0) {
+            val sortedList = slipDateList.sortedWith(compareByDescending { it.date })
+
+            Log.i("slipDateList", sortedList.toString())
+
+            return sortedList[0].date
+        } else {
+            return null
         }
     }
 
