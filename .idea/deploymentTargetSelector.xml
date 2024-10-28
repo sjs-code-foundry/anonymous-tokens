@@ -4,10 +4,10 @@
     <selectionStates>
       <SelectionState runConfigName="app">
         <option name="selectionMode" value="DROPDOWN" />
-        <DropdownSelection timestamp="2024-07-10T20:48:01.079338238Z">
+        <DropdownSelection timestamp="2024-10-28T05:32:16.080420307Z">
           <Target type="DEFAULT_BOOT">
             <handle>
-              <DeviceId pluginId="LocalEmulator" identifier="path=/home/stephen/.android/avd/Blackview_BV9900E_API_29.avd" />
+              <DeviceId pluginId="PhysicalDevice" identifier="serial=BV9900EQEEA004104" />
             </handle>
           </Target>
         </DropdownSelection>

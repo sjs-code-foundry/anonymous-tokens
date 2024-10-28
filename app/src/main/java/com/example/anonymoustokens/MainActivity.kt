@@ -36,6 +36,7 @@ class MainActivity : ComponentActivity() {
         initRecyclerView()
         addTestData()
         updateCleanTime()
+        slipDateAdapter.sortByRecency()
 
         binding.btnAddSlipDate.setOnClickListener {
             showDatePicker()
@@ -44,6 +45,7 @@ class MainActivity : ComponentActivity() {
         binding.btnDeleteSelectedSlipDates.setOnClickListener {
             slipDateAdapter.deleteSelectedSlipDates()
             updateCleanTime()
+            slipDateAdapter.sortByRecency()
         }
     }
 
@@ -91,6 +93,7 @@ class MainActivity : ComponentActivity() {
                 val selectedSlipDate = SlipDate(LocalDate.parse(formattedDate))
                 slipDateAdapter.addSlipDate(selectedSlipDate)
                 updateCleanTime()
+                slipDateAdapter.sortByRecency()
             },
             calendar.get(Calendar.YEAR),
             calendar.get(Calendar.MONTH),
