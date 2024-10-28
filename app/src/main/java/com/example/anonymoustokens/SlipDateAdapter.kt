@@ -1,6 +1,6 @@
 package com.example.anonymoustokens
 
-import android.util.Log
+import android.graphics.Paint.STRIKE_THRU_TEXT_FLAG
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,30 +11,6 @@ import androidx.recyclerview.widget.RecyclerView
 class SlipDateAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private var slipdates: MutableList<SlipDate> = ArrayList()
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SlipdateViewHolder {
-        return SlipdateViewHolder(
-            LayoutInflater.from(parent.context).inflate(R.layout.item_slipdate, parent, false)
-        )
-    }
-
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        when(holder) {
-
-            is SlipdateViewHolder -> {
-                holder.bind(slipdates.get(position))
-            }
-
-        }
-    }
-
-    override fun getItemCount(): Int {
-        return slipdates.size
-    }
-
-    fun submitList(slipdateList: List<SlipDate>) {
-        slipdates = slipdateList.toMutableList()
-    }
 
     class SlipdateViewHolder constructor(
         slipdateView: View
@@ -48,12 +24,50 @@ class SlipDateAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             slipdateField.setText(slipDate.date.toString())
             checkField.isChecked = slipDate.isChecked
 
+            if (slipDate.isChecked) {
+                slipdateField.paintFlags = slipdateField.paintFlags or STRIKE_THRU_TEXT_FLAG
+            } else {
+                slipdateField.paintFlags = slipdateField.paintFlags and STRIKE_THRU_TEXT_FLAG.inv()
+            }
+
         }
 
     }
 
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SlipdateViewHolder {
+        val binding = LayoutInflater.from(parent.context).inflate(R.layout.item_slipdate, parent, false)
+
+        return SlipdateViewHolder(binding)
+    }
+
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        when(holder) {
+            is SlipdateViewHolder -> {
+                holder.bind(slipdates.get(position))
+
+                holder.checkField.setOnClickListener {
+                    slipdates.get(position).isChecked = !slipdates.get(position).isChecked
+                    notifyItemChanged(position)
+                }
+            }
+        }
+    }
+
+    override fun getItemCount(): Int {
+        return slipdates.size
+    }
+
+    fun submitList(slipdateList: List<SlipDate>) {
+        slipdates = slipdateList.toMutableList()
+    }
+
     fun getSlipDates(): List<SlipDate> {
         return slipdates
+    }
+
+    fun addSlipDate(slipDate: SlipDate) {
+        slipdates.add(slipDate)
+        notifyItemInserted(slipdates.size - 1)
     }
 
     fun deleteSelectedSlipDates(): List<SlipDate> {
@@ -64,6 +78,14 @@ class SlipDateAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         notifyDataSetChanged()
 
         return slipdates
+    }
+
+    private fun toggleStrikeThrough(tvSlipDate: TextView, isChecked: Boolean) {
+        if(isChecked) {
+            tvSlipDate.paintFlags = tvSlipDate.paintFlags or STRIKE_THRU_TEXT_FLAG
+        } else {
+            tvSlipDate.paintFlags = tvSlipDate.paintFlags and STRIKE_THRU_TEXT_FLAG.inv()
+        }
     }
 
 }
