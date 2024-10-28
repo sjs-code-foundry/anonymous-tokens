@@ -41,8 +41,14 @@ class MainActivity : ComponentActivity() {
 //            showDatePicker()
             Log.i("Latest Date", getLatestDate().toString())
         }
+
+        binding.btnDeleteSelectedSlipDates.setOnClickListener {
+            slipDateAdapter.deleteSelectedSlipDates()
+//            updateCleanTime()
+        }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun addTestData() {
         val data = TestData.createDataSet()
         slipDateAdapter.submitList(data)

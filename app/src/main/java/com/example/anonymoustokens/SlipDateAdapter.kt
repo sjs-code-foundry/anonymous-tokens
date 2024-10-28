@@ -1,5 +1,6 @@
 package com.example.anonymoustokens
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 
 class SlipDateAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    private var slipdates: List<SlipDate> = ArrayList()
+    private var slipdates: MutableList<SlipDate> = ArrayList()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SlipdateViewHolder {
         return SlipdateViewHolder(
@@ -32,7 +33,7 @@ class SlipDateAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     }
 
     fun submitList(slipdateList: List<SlipDate>) {
-        slipdates = slipdateList
+        slipdates = slipdateList.toMutableList()
     }
 
     class SlipdateViewHolder constructor(
@@ -52,6 +53,16 @@ class SlipDateAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     }
 
     fun getSlipDates(): List<SlipDate> {
+        return slipdates
+    }
+
+    fun deleteSelectedSlipDates(): List<SlipDate> {
+        slipdates.removeAll { SlipDate ->
+            SlipDate.isChecked
+        }
+
+        notifyDataSetChanged()
+
         return slipdates
     }
 
