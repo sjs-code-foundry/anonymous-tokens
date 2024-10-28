@@ -31,10 +31,10 @@ class MainActivity : ComponentActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
-        enableEdgeToEdge()
 
         initRecyclerView()
         addTestData()
+        // ^^^ This loads the test data, adapt to local storage
         updateCleanTime()
         slipDateAdapter.sortByRecency()
 
@@ -105,8 +105,6 @@ class MainActivity : ComponentActivity() {
     @RequiresApi(Build.VERSION_CODES.O)
     private fun updateCleanTime() {
         val latestDate = getLatestDate()
-
-        binding.tvSlipDateEntry.text = latestDate.toString()
 
         Log.i("Latest Date", latestDate.toString())
 
