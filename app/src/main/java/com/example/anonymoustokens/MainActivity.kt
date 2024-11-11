@@ -4,14 +4,13 @@ import android.app.DatePickerDialog
 import android.graphics.PorterDuff
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
-import androidx.activity.enableEdgeToEdge
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.room.Room
 import com.example.anonymoustokens.databinding.ActivityMainBinding
-import com.example.anonymoustokens.ui.theme.TestData
+import com.example.anonymoustokens.db.SlipdatesDatabase
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.Period
@@ -24,6 +23,9 @@ class MainActivity : ComponentActivity() {
     private lateinit var binding: ActivityMainBinding
     private val calendar = Calendar.getInstance()
 
+    companion object {
+        lateinit var slipdatesDatabase: SlipdatesDatabase
+    }
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,10 +33,12 @@ class MainActivity : ComponentActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
+        slipdatesDatabase = Room.databaseBuilder(this, SlipdatesDatabase::class.java, "Slipdates_DB").build()
 
         initRecyclerView()
-        addTestData()
-        // ^^^ This loads the test data, adapt to local storage
+
+        addDataFromDB()
+
         updateCleanTime()
         slipDateAdapter.sortByRecency()
 
@@ -49,9 +53,9 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
-    private fun addTestData() {
-        val data = TestData.createDataSet()
+    private fun addDataFromDB() {
+        val slipdatesDao = slipdatesDatabase.getSlipdatesDao()
+        val data = slipdatesDao.getAllSlipdates()
         slipDateAdapter.submitList(data)
     }
 
@@ -70,9 +74,6 @@ class MainActivity : ComponentActivity() {
 
         if(dateListLength > 0) {
             val sortedList = slipDateList.sortedWith(compareByDescending { it.date })
-
-            Log.i("slipDateList", sortedList.toString())
-
             return sortedList[0].date
         } else {
             return null
@@ -87,10 +88,7 @@ class MainActivity : ComponentActivity() {
                 selectedDate.set(year, monthOfYear, dayOfMonth)
                 val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
                 val formattedDate = dateFormat.format(selectedDate.time)
-
-                Log.i("Selected Date", formattedDate.toString())
-
-                val selectedSlipDate = SlipDate(LocalDate.parse(formattedDate))
+                val selectedSlipDate = SlipDate(date = LocalDate.parse(formattedDate))
                 slipDateAdapter.addSlipDate(selectedSlipDate)
                 updateCleanTime()
                 slipDateAdapter.sortByRecency()
@@ -105,8 +103,6 @@ class MainActivity : ComponentActivity() {
     @RequiresApi(Build.VERSION_CODES.O)
     private fun updateCleanTime() {
         val latestDate = getLatestDate()
-
-        Log.i("Latest Date", latestDate.toString())
 
         if(latestDate != null) {
 

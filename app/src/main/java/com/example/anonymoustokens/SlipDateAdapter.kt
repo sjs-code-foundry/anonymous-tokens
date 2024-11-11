@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
 import android.widget.TextView
+import androidx.lifecycle.LiveData
 import androidx.recyclerview.widget.RecyclerView
 
 class SlipDateAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -57,8 +58,9 @@ class SlipDateAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         return slipdates.size
     }
 
-    fun submitList(slipdateList: List<SlipDate>) {
-        slipdates = slipdateList.toMutableList()
+    fun submitList(slipdateList: LiveData<List<SlipDate>>) {
+        slipdates = slipdateList as MutableList<SlipDate>
+        // ^^^ Try to adapt this to interact with Room DB
     }
 
     fun getSlipDates(): List<SlipDate> {
